@@ -1,0 +1,25 @@
+https://www.kutu66.com//GitHub/article_97250（不知道在说什么）
+https://blog.csdn.net/shou1989/article/details/9001947（美化admin的没啥用）
+https://coderwall.com/p/ieh-sg/django-custom-dashboard-easy(无法复现)
+https://www.cnblogs.com/AdaminXie/p/11598746.html（有完整源码貌似）
+https://www.ctolib.com/topics-142689.html(和上面的是相同的源码)
+https://www.ctolib.com/amp/topics-142689.html(和上面的是相同的源码)
+https://www.cnpython.com/pypi/django-dashboard（官方文档，最后看吧）
+
+
+
+
+实验运行前:
+修改三个文件的数据库连接关系:
+settings.py
+table_example_con/views.py
+table_example_con/For_MySQL/get_kinds.py
+
+实验运行步骤:
+python manage.py migrate
+打开datagrip并且导入数据：
+ithome_news.sql里面的sql语言
+python manage.py runserver
+
+浏览器打开:
+http://127.0.0.1:8000/table_example

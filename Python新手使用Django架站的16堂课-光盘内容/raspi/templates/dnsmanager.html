@@ -1,0 +1,99 @@
+<!-- dnsmanager.html (raspi.tw project) -->
+{% extends "base.html" %}
+{% block title %}管理您的网址{% endblock %}
+{% block content %}
+<div class='container'>
+{% for message in messages %}
+    <div class='alert alert-{{message.tags}}'>{{ message }}</div>
+{% endfor %}
+    <div class='row'>
+        <div class='col-md-12'>
+            <div class='panel panel-primary'>
+                <div class='panel-heading' align=center>
+                    <h3>管理您的网址</h3>
+                    {% if user.is_authenticated %}
+                        Welcome: {{ user.username }}
+                    {% endif %}
+                </div>
+                <div class='panel-body'>
+                    {% for subdomain in subdomains %}
+                        {% if forloop.first %}
+                            <table border=1>
+                                <tr>
+                                    <td width=100>网址ID</td>
+                                    <td width=200>创建时间</td>
+                                    <td width=100>管理</td>
+                                </tr>
+                        {% endif %}
+                            <tr>
+                                <td> {{ subdomain.name }} </td>
+                                <td> {{ subdomain.created_at }}</td>
+                                <td> <a href='/delsubdomain/{{subdomain.name}}'>删除</a></td>
+                            </tr>
+                        {% if forloop.last %}
+                            </table>
+                        {% endif %}                        
+                    {% empty %}
+                        <h3>您现在没有任何的二级网址</h3>
+                        <table>
+                            <form action='.' method='POST'>
+                                {% csrf_token %}
+                                {{ form.as_table }}
+                                <tr><td colspan=2>
+                                <input type='submit' value='提交申请'>
+                                </td></tr>
+                            </form>
+                        </table>
+                    {% endfor %}
+                </div>
+                <div class='panel-footer'>
+                    {% for rec in records_in_dnsimple %}
+                        {% if forloop.first %}
+                            <table border=1>
+                                <tr>
+                                    <td width=100>网址名称</td>
+                                    <td width=100>类型</td>
+                                    <td width=200>内容</td>
+                                    <td width=100>管理</td>
+                                </tr>
+                        {% endif %}
+                            <tr>
+                                <td> {{ rec.name }} </td>
+                                <td> {{ rec.record_type }}</td>
+                                <td> {{ rec.content }}</td>
+                                <td> <a href='/delrecord/{{rec.id}}'>删除</a></td>
+                            </tr>
+                        {% if forloop.last %}
+                            </table>
+                        {% endif %}                        
+                    {% empty %}
+                        <h4>您目前没有设置任何的记录</h4>
+                    {% endfor %}
+                    {% if main_subdomain %}
+                        <table>
+                            <form action='/addrecord/{{main_subdomain}}/' method='POST'>
+                            {% csrf_token %}
+                            <tr>
+                                <td colspan=2>
+                                    记录内容(IP)：<input type='text' name='content' size=20 >
+                                </td>
+                                <td>
+                                    类型：
+                                    <select name='record_type'>
+                                        <option value='A'>A</option>
+                                        <option value='NS'>NS</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type='submit' value='新建'>
+                                </td>
+                            </tr>
+                            </form>
+                        </table>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
